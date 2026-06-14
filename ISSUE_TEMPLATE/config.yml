@@ -1,0 +1,12 @@
+# Adopted from:
+# - https://github.com/langchain-ai/langchain/blob/master/.github/ISSUE_TEMPLATE/config.yml
+# - https://github.com/openai/openai-python/blob/main/.github/ISSUE_TEMPLATE/config.yml
+# Necessary substitutions: repo-specific contact links.
+blank_issues_enabled: false
+contact_links:
+  - name: GitHub Issues / Projects task truth
+    url: https://github.com/GongYuanCaiJi/global-governance/issues
+    about: Search existing Global Governance issues before opening a new one.
+  - name: Global Governance repository
+    url: https://github.com/GongYuanCaiJi/global-governance
+    about: Use this repository for repo-native task truth and pull requests.

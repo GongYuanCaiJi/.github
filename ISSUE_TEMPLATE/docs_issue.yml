@@ -1,0 +1,46 @@
+# Adopted from:
+# - https://github.com/microsoft/autogen/blob/main/.github/ISSUE_TEMPLATE/2-doc_issue.yml
+# Necessary substitutions: repo name, doc link target, Traditional Chinese labels.
+name: Documentation Issue
+description: 回報文件缺漏、錯誤、過期或不清楚。
+title: "[Docs]: "
+labels: ["documentation", "needs-triage"]
+type: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        請用這張表單回報文件問題：缺漏、錯誤、過期、說不清楚、或跟實際流程不一致。
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前確認
+      options:
+        - label: 我已經確認這是文件問題，不是實作 bug 或 feature request。
+          required: true
+        - label: 我已經搜尋過既有 issue，沒有找到同一個文件問題。
+          required: true
+
+  - type: textarea
+    id: doc_issue
+    attributes:
+      label: 文件問題是什麼？
+      description: 說明哪裡錯、哪裡缺、哪裡過期或哪裡看不懂。
+      value: |
+        **問題描述**
+
+        **我希望文件改成什麼樣**
+
+        **補充背景**
+    validations:
+      required: true
+
+  - type: input
+    id: doc_link
+    attributes:
+      label: 文件連結或路徑
+      description: 請貼出 GitHub URL 或 repo 內路徑。
+      placeholder: "docs/... 或 https://github.com/GongYuanCaiJi/global-governance/..."
+    validations:
+      required: true

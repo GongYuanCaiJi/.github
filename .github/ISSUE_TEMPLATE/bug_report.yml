@@ -1,0 +1,109 @@
+# Adopted from:
+# - https://github.com/langchain-ai/langchain/blob/master/.github/ISSUE_TEMPLATE/bug-report.yml
+# - https://github.com/openai/openai-python/blob/main/.github/ISSUE_TEMPLATE/bug_report.yml
+# Necessary substitutions: repo name, support routing, affected surface list, Traditional Chinese labels.
+name: Bug Report
+description: 回報 Global Governance repo、workflow、hook、validator、Spec Kit 或 GitHub automation 的錯誤。
+title: "[Bug]: "
+labels: ["bug", "needs-triage"]
+type: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        請只用這張表單回報「系統真的壞了」的問題。
+        如果只是想法、功能需求、研究、支線任務，請改用其他表單。
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 提交前確認
+      description: 這些確認項直接採用 LangChain / OpenAI Python 類 issue template 的 triage 思路。
+      options:
+        - label: 這是 bug，不是一般使用問題、功能需求或研究題。
+          required: true
+        - label: 我已經搜尋過既有 issue，沒有找到同一個問題。
+          required: true
+        - label: 我已經寫清楚標題，讓人能一眼看出壞在哪裡。
+          required: true
+        - label: 這不是安全漏洞；如果是安全問題，應走私下 security disclosure。
+          required: true
+
+  - type: dropdown
+    id: affected_surface
+    attributes:
+      label: 影響範圍
+      description: 這個 bug 主要影響哪一層？
+      multiple: true
+      options:
+        - GitHub Issues / Projects / PR workflow
+        - Spec Kit workflow
+        - Handoff / continuity
+        - Hooks / validators
+        - Cross-agent review / dispatch
+        - Worktree / branch / git workflow
+        - Documentation / operator guidance
+        - Other / not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: what_happened
+    attributes:
+      label: 發生了什麼？
+      description: 請清楚描述目前看到的錯誤、錯誤訊息、截圖或不正常行為。
+      placeholder: "我原本要做 X，但系統出現 Y。"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 你原本期待發生什麼？
+      description: 寫出正常情況下應該發生的結果。
+      placeholder: "正常應該要..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 如何重現？
+      description: 請寫出最小、清楚、可重現的步驟。能複製就能更快修。
+      placeholder: |
+        1. 打開...
+        2. 執行...
+        3. 看到...
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 錯誤訊息 / log / 相關輸出
+      description: 如果有錯誤訊息或 log，請貼完整內容。
+      render: shell
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境資訊
+      description: 版本、branch、PR、OS、相關工具版本，能提供多少就提供多少。
+      placeholder: |
+        Branch:
+        PR / Issue:
+        macOS:
+        specify version:
+        gh version:
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional_context
+    attributes:
+      label: 補充資訊
+      description: 相關 issue、PR、截圖或其他背景。
+    validations:
+      required: false

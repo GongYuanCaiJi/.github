@@ -3,6 +3,11 @@ PR template — 保持簡短。硬擋是 GitHub required checks,這份只是讓 
 規則:講「這個 PR 改了什麼」,問題背景放 Issue 並用 Closes # 連過去。
 -->
 
+Closes #
+
+<!-- 每個 PR 都要有對應的 issue。沒有 issue 就先開一張,不要直接開 PR ——
+     issue 說「為什麼要動」,PR 說「動了什麼」,兩者分工。 -->
+
 ## 這個 PR 做了什麼
 
 <!-- 一兩句、祈使句:diff 真正「改」了什麼(講改動本身,不是它叫用的工具)。 -->
@@ -10,8 +15,6 @@ PR template — 保持簡短。硬擋是 GitHub required checks,這份只是讓 
 ## 為什麼
 
 <!-- diff 看不出來的理由:決策、取捨、目標。一小段。問題的大背景放 Issue。 -->
-
-Closes #
 
 ## 怎麼驗證的
 

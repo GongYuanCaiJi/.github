@@ -18,6 +18,9 @@ permissions:
 
 jobs:
   ci:
+    # Draft PRs don't run CI; it starts when the PR is marked ready for review
+    # (callers list ready_for_review in their pull_request types).
+    if: github.event_name != 'pull_request' || !github.event.pull_request.draft
     runs-on: ${{ inputs.runs-on }}
     timeout-minutes: 30
     steps:

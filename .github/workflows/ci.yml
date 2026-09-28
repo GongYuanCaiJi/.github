@@ -1,0 +1,55 @@
+# Shared CI for GongYuanCaiJi repos. Callers:
+#   jobs:
+#     ci:
+#       uses: GongYuanCaiJi/.github/.github/workflows/ci.yml@main
+# Python / Node steps turn on by themselves when pyproject.toml / package.json exist.
+name: ci
+
+on:
+  workflow_call:
+    inputs:
+      runs-on:
+        description: Runner label, e.g. ubuntu-latest or self-hosted
+        type: string
+        default: ubuntu-latest
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    runs-on: ${{ inputs.runs-on }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0 # gitleaks scans the pushed commits
+
+      - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
+
+      - name: pre-commit
+        if: hashFiles('.pre-commit-config.yaml') != ''
+        run: uvx pre-commit run --all-files --show-diff-on-failure
+
+      - uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3.0.0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITLEAKS_ENABLE_COMMENTS: false
+
+      - name: uv sync
+        if: hashFiles('pyproject.toml') != ''
+        run: uv sync --frozen
+      - name: pytest
+        if: hashFiles('pyproject.toml') != '' && hashFiles('tests/**') != ''
+        run: uv run pytest -q
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        if: hashFiles('package.json') != ''
+        with:
+          node-version: lts/*
+          cache: npm
+      - name: npm
+        if: hashFiles('package.json') != ''
+        run: |
+          npm ci
+          npm test --if-present

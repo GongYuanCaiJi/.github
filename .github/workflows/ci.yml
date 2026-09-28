@@ -12,6 +12,10 @@ on:
         description: Runner label, e.g. ubuntu-latest or self-hosted
         type: string
         default: ubuntu-latest
+      tests:
+        description: Install dependencies and run the repo's tests (false when the repo runs its own test job)
+        type: boolean
+        default: true
 
 permissions:
   contents: read
@@ -55,19 +59,19 @@ jobs:
           fi
 
       - name: uv sync
-        if: hashFiles('pyproject.toml') != ''
+        if: inputs.tests && hashFiles('pyproject.toml') != ''
         run: uv sync --frozen
       - name: pytest
-        if: hashFiles('pyproject.toml') != '' && hashFiles('tests/**') != ''
+        if: inputs.tests && hashFiles('pyproject.toml') != '' && hashFiles('tests/**') != ''
         run: uv run pytest -q
 
       - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
-        if: hashFiles('package.json') != ''
+        if: inputs.tests && hashFiles('package.json') != ''
         with:
           node-version: lts/*
           cache: npm
       - name: npm
-        if: hashFiles('package.json') != ''
+        if: inputs.tests && hashFiles('package.json') != ''
         run: |
           npm ci
           npm test --if-present

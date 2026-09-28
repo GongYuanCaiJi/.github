@@ -40,6 +40,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITLEAKS_ENABLE_COMMENTS: false
 
+      # SAST (Semgrep CE). Semgrep's documented rollout: PRs are diff-aware
+      # (--baseline-commit) and block only findings the PR introduces; pushes
+      # to main run a full scan that reports without blocking.
+      - name: semgrep
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          if [ -n "$BASE_SHA" ]; then
+            uvx semgrep@1.178.0 scan --config p/default --metrics=off --error --baseline-commit "$BASE_SHA"
+          else
+            uvx semgrep@1.178.0 scan --config p/default --metrics=off
+          fi
+
       - name: uv sync
         if: hashFiles('pyproject.toml') != ''
         run: uv sync --frozen

@@ -9,9 +9,9 @@ on:
   workflow_call:
     inputs:
       runs-on:
-        description: Runner label, e.g. ubuntu-latest or self-hosted
+        description: Runner label. Empty = x99 (self-hosted) for private repos, ubuntu-latest for public ones
         type: string
-        default: ubuntu-latest
+        default: ''
       tests:
         description: Install dependencies and run the repo's tests (false when the repo runs its own test job)
         type: boolean
@@ -26,7 +26,9 @@ jobs:
     # Draft PRs don't run CI; it starts when the PR is marked ready for review
     # (callers list ready_for_review in their pull_request types).
     if: github.event_name != 'pull_request' || !github.event.pull_request.draft
-    runs-on: ${{ inputs.runs-on }}
+    # Private repos run on the x99 box (every private repo has an x99 runner, see dotfiles git-sync/runners.sh);
+    # public repos stay on GitHub-hosted runners so fork PRs never run on x99.
+    runs-on: ${{ inputs.runs-on || (github.event.repository.private && 'x99' || 'ubuntu-latest') }}
     timeout-minutes: 30
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1

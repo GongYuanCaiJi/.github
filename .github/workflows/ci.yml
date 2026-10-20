@@ -36,6 +36,20 @@ jobs:
           fetch-depth: 0 # gitleaks scans the pushed commits
           persist-credentials: false
 
+      # A private repo's own workflow that names a GitHub-hosted label (runs-on or a matrix os) skips x99
+      # and spends Actions minutes. Use the x99 expression above; a job that really needs macOS / ARM /
+      # Windows keeps the label and says why on the same line: `# hosted: <reason>`.
+      - name: private repos run on x99
+        if: github.event.repository.private
+        run: |
+          bad=$(grep -rnE '(ubuntu|macos|windows)-(latest|[0-9])' .github/workflows --include='*.yml' --include='*.yaml' |
+            grep -vE "'x99'|# hosted:" || true)
+          if [ -n "$bad" ]; then
+            echo "$bad"
+            echo "::error::GitHub-hosted runner in a private repo. Use: runs-on: \${{ github.event.repository.private && 'x99' || 'ubuntu-latest' }} (or add '# hosted: <reason>')"
+            exit 1
+          fi
+
       - uses: astral-sh/setup-uv@c18668ad3cf93ea998bef934396af7bb5c839dc7 # v10.2.0
 
       - name: pre-commit
